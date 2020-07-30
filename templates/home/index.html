@@ -55,17 +55,93 @@
         }
 
         /** FF*/
-        input[type="range"]::-moz-range-progress {
-            background-color: #43e5f7;
+        input.red-s[type='range']::-moz-range-progress {
+            background: red;
+
         }
 
-        input[type="range"]::-moz-range-track {
-            background-color: #9a905d;
+        input.green-s[type='range']::-moz-range-progress {
+            background: green;
+
         }
+
+        input.blue-s[type='range']::-moz-range-progress {
+            background: blue;
+
+        }
+        input[type="range"]::-moz-range-progress {
+            background-color: grey;
+        }
+
+        {#input.red-s[type="range"]::-moz-range-track {#}
+        {#    background-color: red;#}
+        {#}#}
 
         .back {
             opacity: 0.5;
             background-image: linear-gradient(to right top, #d16ba5, #c777b9, #ba83ca, #aa8fd8, #9a9ae1, #8aa7ec, #79b3f4, #69bff8, #52cffe, #41dfff, #46eefa, #5ffbf1);
+        }
+
+    </style>
+    <style>
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider-1 {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        .slider-1:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        input:checked + .slider-1 {
+            background-color: green;
+        }
+
+        input:focus + .slider-1 {
+            box-shadow: 0 0 1px green;
+        }
+
+        input:checked + .slider-1:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+        }
+
+        /* Rounded sliders */
+        .slider-1.round {
+            border-radius: 34px;
+        }
+
+        .slider-1.round:before {
+            border-radius: 50%;
         }
     </style>
 </head>
@@ -81,214 +157,132 @@
         </li>
 
     </ul>
-    <div class="row justify-content-center">
-        {#        <div class="col-md-3"></div>#}
-        <div class="col-md-8 col-sm-12 bordered-row">
-            <div class=" card">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-3">
-                            <label></label>
-                            <select data-url="{% url 'pattern_picker' %}" name="pattern-picker" id="pattern-picker"
-                                    class="form-control-sm">
-                                <option value="">-----</option>
-                                {% for option in drop_down %}
-                                    <option value="{{ option.value }}">{{ option.label }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="col-md-7">
-                            <label>Delay: <small>{{ sliders.delay.current }}</small></label>
-                            <input data-url="{% url 'delay_slider' %}" type="range"
-                                   class="slider custom-range form-control-sm pull-right"
-                                   value="{{ sliders.delay.current }}" min="{{ sliders.delay.min }}"
-                                   max="{{ sliders.delay.max }}"
-                                   id="delaySlider"
-                                   name="delaySlider"
-                            >
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">RGBA Settings</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">
-                        <div class="form-check pl-0">
-                            <label for="random" class="form-check-label">Random</label>
-                            <input data-url="{% url 'random' %}" style="width: 110%" data-size="xs" id="random"
-                                   class="form-check-input"
-                                   type="checkbox"
-                                   {% if random %}checked{% endif %}
-                                   data-toggle="toggle"
-                                   data-onstyle="success">
-                        </div>
-                    </h6>
-                    <div class="card-text">
-                        <p class="card-subtitle mb-2 text-muted">RGB Values</p>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <label>R: <small>{{ sliders.red.current }}</small></label>
-                                <input data-url="{% url 'red' %}" type="range"
-                                       class="slider red-s custom-range form-control-sm pull-right success"
-                                       value="{{ sliders.red.current }}"
-                                       min="{{ sliders.red.min }}"
-                                       max="{{ sliders.red.max }}"
-                                       id="customRange2">
-                            </div>
-                            <div class="col-md-12">
-                                <label>G: <small>{{ sliders.green.current }}</small></label>
-                                <input data-url="{% url 'green' %}" type="range"
-                                       class="slider green-s custom-range form-control-sm pull-right"
-                                       value="{{ sliders.green.current }}" min="{{ sliders.green.min }}"
-                                       max="{{ sliders.green.max }}"
-                                       id="customRange2">
-                            </div>
-                            <div class="col-md-12">
-                                <label>B: <small>{{ sliders.blue.current }}</small></label>
-                                <input data-url="{% url 'blue' %}" type="range"
-                                       class="slider blue-s custom-range form-control-sm pull-right"
-                                       value="{{ sliders.blue.current }}"
-                                       min="{{ sliders.blue.min }}"
-                                       max="{{ sliders.blue.max }}"
-                                       id="customRange2">
-                            </div>
-                            <div class="col-md-12">
-                                <label>Alpha: <small>{{ sliders.alpha.current }}</small></label>
-                                <input data-url="{% url 'alpha' %}" type="range"
-                                       class="slider custom-range form-control-sm pull-right"
-                                       value="{{ sliders.alpha.current }}" min="{{ sliders.alpha.min }}"
-                                       max="{{ sliders.alpha.max }}"
-                                       id="customRange2">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="card metior">
-                <div class="card-body">
-                    <h5 class="card-title">Meteor Settings</h5>
+    <form class="my-form" method="get" action="{% url 'get_form_values' %}">
+        <div class="row justify-content-center">
 
-                    <div class="card-text">
-                        <div class="row ">
-                            <div class="col-md-12">
-                                <label>Size: <small>{{ sliders.size.current }}</small></label>
-                                <input data-url="{% url 'size' %}" type="range"
-                                       class="slider custom-range form-control-sm pull-right success"
-                                       value="{{ sliders.size.current }}"
-                                       min="{{ sliders.size.min }}"
-                                       max="{{ sliders.size.max }}"
-                                       id="customRange2">
+            {#        <div class="col-md-3"></div>#}
+            <div class="col-md-8 col-sm-12 bordered-row">
+                <div class=" card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label></label>
+                                <select data-url="{% url 'render_settings' %}" name="setting_name" id="pattern-picker"
+                                        class="form-control-sm">
+                                    <option value="">-----</option>
+                                    {% for option in drop_down %}
+                                        <option value="{{ option.Name }}">{{ option.Name }}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
-                            <div class="col-md-12">
-                                <div class="form-check pl-0">
-                                    <label for="random" class="form-check-label">Random Decay</label>
-                                    <input data-url="{% url 'random_decay' %}" data-size="xs" id="random"
-                                           class="form-check-input" type="checkbox"
-                                           {% if random_decay %}checked{% endif %}
-                                           data-toggle="toggle"
-                                           data-onstyle="success">
+                            <div class="col-md-7">
+                                <label>Delay: </label><small>{{ sliders.delay.current }}</small>
+                                <input type="range"
+                                       class="slider custom-range form-control-sm pull-right"
+                                       value="{{ sliders.delay.current }}" min="{{ sliders.delay.min }}"
+                                       max="{{ sliders.delay.max }}"
+                                       id="delaySlider"
+                                       name="delaySlider"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">RGBA Settings</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">
+                            <div class="form-check pl-0">
+                                <label for="random" class="form-check-label">Random</label>
+                                <label class="switch">
+                                    <input class="form-control-sm" name="random" id="random" type="checkbox" {% if random %}checked{% endif %}>
+                                    <span class="slider-1 round"></span>
+                                </label>
+                                {#                                <input style="width: 110%" data-size="xs" id="random"#}
+                                {#                                       class="form-check-input"#}
+                                {#                                       type="checkbox"#}
+                                {#                                       name="random"#}
+                                {#                                       {% if random %}checked{% endif %}#}
+                                {#                                       data-toggle="toggle"#}
+                                {#                                       data-onstyle="success">#}
+                            </div>
+                        </h6>
+                        <div class="card-text">
+                            <p class="card-subtitle mb-2 text-muted">RGB Values</p>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label>R: </label><small>{{ sliders.red.current }}</small>
+                                    <input type="range"
+                                           name="red"
+                                           class="slider red-s custom-range form-control-sm pull-right success"
+                                           value="{{ sliders.red.current }}"
+                                           min="{{ sliders.red.min }}"
+                                           max="{{ sliders.red.max }}"
+                                           id="customRange2">
+                                </div>
+                                <div class="col-md-12">
+                                    <label>G: </label><small>{{ sliders.green.current }}</small>
+                                    <input type="range"
+                                           name="green"
+                                           class="slider green-s custom-range form-control-sm pull-right"
+                                           value="{{ sliders.green.current }}" min="{{ sliders.green.min }}"
+                                           max="{{ sliders.green.max }}"
+                                           id="customRange2">
+                                </div>
+                                <div class="col-md-12">
+                                    <label>B: </label><small>{{ sliders.blue.current }}</small>
+                                    <input type="range"
+                                           name="blue"
+                                           class="slider blue-s custom-range form-control-sm pull-right"
+                                           value="{{ sliders.blue.current }}"
+                                           min="{{ sliders.blue.min }}"
+                                           max="{{ sliders.blue.max }}"
+                                           id="customRange2">
+                                </div>
+                                <div class="col-md-12">
+                                    <label>Alpha: </label><small>{{ sliders.alpha.current }}</small>
+                                    <input type="range"
+                                           name="alpha"
+                                           class="slider custom-range form-control-sm pull-right"
+                                           value="{{ sliders.alpha.current }}" min="{{ sliders.alpha.min }}"
+                                           max="{{ sliders.alpha.max }}"
+                                           id="customRange2">
                                 </div>
                             </div>
-                            <div class="col-md-12">
-                                <label>Trail Decay: <small>{{ sliders.trail_decay.current }}</small></label>
-                                <input data-url="{% url 'trail_decay' %}" type="range"
-                                       class="slider custom-range form-control-sm pull-right"
-                                       value="{{ sliders.trail_decay.current }}" min="{{ sliders.trail_decay.min }}"
-                                       max="{{ sliders.trail_decay.max }}"
-                                       id="customRange2">
-                            </div>
-
                         </div>
                     </div>
-
                 </div>
-            </div>
-            <div class="card">
-                <div class="card-body">
-                    <div class="card-text">
-                        Lorem Ispem Text here
+                <div class="card settings"></div>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-text">
+                            Lorem Ispem Text here
+                        </div>
+                        <a href="#" class="card-link btn btn-outline-success"><i class="fa fa-github"> GitHub</i></a>
+                        <a href="#" class="card-link btn btn-outline-primary"><i class="fa fa-linkedin"></i>
+                            LinkedIn</a>
                     </div>
-                    <a href="#" class="card-link btn btn-outline-success"><i class="fa fa-github"> GitHub</i></a>
-                    <a href="#" class="card-link btn btn-outline-primary"><i class="fa fa-linkedin"></i> LinkedIn</a>
                 </div>
             </div>
+
         </div>
-
-    </div>
-
-
+    </form>
 </div>
-
-
 {% block main %}{% endblock %}
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"
-        integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
-{#<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"#}
-{#        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"#}
-{#        crossorigin="anonymous"></script>#}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-        crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-        crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
+{% include 'home/scripts.html' %}
 <script>
-    $(document).ready(function () {
-        function send_value(url, values) {
-            url += `?${values.name}=${values.value}`
-            $.ajax({
-                url: url,
-                type: 'get',
-                success: function (response) {
-                    console.log(response)
-                    if (response.show_metior) {
-                        $('.metior').removeAttr('hidden')
-                    } else {
-                        $('.metior').attr('hidden', '')
-                    }
+    function send_value(url, values, is_setting = false) {
+        {#url += `?${values.name}=${values.value}`#}
+        $.ajax({
+            url: url,
+            type: 'get',
+            success: function (response) {
+                if (is_setting) {
+                    $('.settings').html(response.value)
                 }
-            })
-        }
-
-        $('.form-control-sm').on('change', function () {
-            let inp = $(this)
-            let url = inp.attr('data-url')
-            let values = {
-                name: 'value',
-                value: inp.val()
             }
-            send_value(url, values)
-            {#console.log(url, values)#}
         })
-        $('.form-check-input').on('change', function () {
-            let inp = $(this)
-            let url = inp.attr('data-url')
-            let values = {
-                name: 'value',
-                value: inp.prop('checked')
-            }
-            send_value(url, values)
-            {#console.log(url, values)#}
-        })
-        $('.slider').on('input', function () {
-            let slider = $(this)
-            let value = slider.val()
-            slider.siblings('label').find('small').html(value)
-            let url = slider.attr('data-url')
-            let values = {
-                name: 'value',
-                value: value
-            }
-            send_value(url, values)
-        })
-        setTimeout(function () {
-            {% if not show_metior %}
-                $('.metior').attr('hidden', '')
-            {% endif %}
-        }, 100)
-    })
+    }
 </script>
 </body>
 </html>
